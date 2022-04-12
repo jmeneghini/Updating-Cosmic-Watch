@@ -100,7 +100,7 @@ def del_SD(port):
             print("\nPress Ctrl + C to Terminate\n")
             if ser.readline().decode("utf-8").strip() == 'CosmicWatchDetector':
                 time.sleep(1)
-                ser.write("remove".encode())                                                                                           # write "removce" to serial port which triggers arduino to delete all SD contents    
+                ser.write("remove".encode())                                                                                           # write "remove" to serial port which triggers arduino to delete all SD contents    
                 while True:
                     data = ser.readline().decode("utf-8")                                                                              # detects when data is finished being deleted
                     if data == 'Done...\r\n':                                                                                                   

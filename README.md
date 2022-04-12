@@ -8,3 +8,4 @@ numpy,
 and
 pyserial
 
+Cosmic Watch Respository: https://github.com/spenceraxani/CosmicWatch-Desktop-Muon-Detector-v2

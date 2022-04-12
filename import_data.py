@@ -33,7 +33,7 @@ def write_to_txt(filename, port, plot = False):                     # writes dat
                                 rate = 1/((t - times[-2])*1e-3)
                                 rates.append(rate)
                                 plt.scatter(t * 1e-3, rate, color="black", s=10)                                                       # plots scatter plot
-                                avg_rate = np.array(rates).mean()
+                                avg_rate = len(rates)/(t*1e-3)
                                 plt.title("Average Rate: {} 1/s".format(np.round(avg_rate, 4)))
                                 plt.pause(0.005)                                                                                    
 

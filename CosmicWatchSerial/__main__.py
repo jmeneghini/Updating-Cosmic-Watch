@@ -122,49 +122,54 @@ def del_SD(port):
     except FileNotFoundError:
         print("Invalid File Name")
 
-ports = serial.tools.list_ports.comports()                                                                                             # obtains all available ports                                                             
-if ports == []:
-    print("No Ports Available")
-    sys.exit()
 
-print("Available Serial Ports: ")
-for port_info, i in zip(sorted(ports), range(len(ports))):
-        print("[{}] {}: {} - {}".format(i + 1, port_info[0], port_info[1], port_info[2]))
-try:
-    selected_port = sorted(ports)[abs(int(input("\nSelect Serial Port: ")) - 1)][0]                                                    # chooses port
-except IndexError:
-    print("Invalid Index")
-    sys.exit()
+def main():
+    ports = serial.tools.list_ports.comports()                                                                                             # obtains all available ports                                                             
+    if ports == []:
+        print("No Ports Available")
+        sys.exit()
 
-options = ["[1] Record data on the computer","[2] Copy data files from SD card to your computer","[3] Remove files from SD card"]
+    print("Available Serial Ports: ")
+    for port_info, i in zip(sorted(ports), range(len(ports))):
+            print("[{}] {}: {} - {}".format(i + 1, port_info[0], port_info[1], port_info[2]))
+    try:
+        selected_port = sorted(ports)[abs(int(input("\nSelect Serial Port: ")) - 1)][0]                                                    # chooses port
+    except IndexError:
+        print("Invalid Index")
+        sys.exit()
 
-print("\nWhat Would You Like to Do: ")
-for options in options:
-    print(options)
+    options = ["[1] Record data on the computer","[2] Copy data files from SD card to your computer","[3] Remove files from SD card"]
 
-selected_op = int(input("\nSelected Operation: "))
-if selected_op == 1:                                                                                                              
-    Tk().withdraw()                                                                                                                    # opens gui to chose file to save data to
-    txt_filename = asksaveasfile(filetypes = [("Text Document", "*.txt"), ("Comma Seperated Values", "*.csv")],defaultextension= [("Text Document", "*.txt"), ("Comma Seperated Values", "*.csv")])
-    print("\nDo you want to plot live data: ")
-    ans = input("Type y or n: ").lower()
-    if ans == "y":
-        plot = True
+    print("\nWhat Would You Like to Do: ")
+    for options in options:
+        print(options)
+
+    selected_op = int(input("\nSelected Operation: "))
+    if selected_op == 1:                                                                                                              
+        Tk().withdraw()                                                                                                                    # opens gui to chose file to save data to
+        txt_filename = asksaveasfile(filetypes = [("Text Document", "*.txt"), ("Comma Seperated Values", "*.csv")],defaultextension= [("Text Document", "*.txt"), ("Comma Seperated Values", "*.csv")])
+        print("\nDo you want to plot live data: ")
+        ans = input("Type y or n: ").lower()
+        if ans == "y":
+            plot = True
+        else:
+            plot = False
+        write_to_txt(txt_filename.name, selected_port, plot)
+
+    elif selected_op == 2:
+        Tk().withdraw()                                                                                                                    # opens gui to chose directory to save data to
+        directory = askdirectory()
+        copy_SD(directory,selected_port)
+
+    elif selected_op == 3:
+        print("\nAre you sure that you want to remove all files from SD card?")
+        ans = input("Type y or n: ").lower()
+        if ans == "y":
+            del_SD(selected_port)
+
     else:
-        plot = False
-    write_to_txt(txt_filename.name, selected_port, plot)
+        print("Invalid Index")
+        sys.exit()
 
-elif selected_op == 2:
-    Tk().withdraw()                                                                                                                    # opens gui to chose directory to save data to
-    directory = askdirectory()
-    copy_SD(directory,selected_port)
-
-elif selected_op == 3:
-    print("\nAre you sure that you want to remove all files from SD card?")
-    ans = input("Type y or n: ").lower()
-    if ans == "y":
-        del_SD(selected_port)
-
-else:
-    print("Invalid Index")
-    sys.exit()
+if __name__ == "__main__":
+    main()
